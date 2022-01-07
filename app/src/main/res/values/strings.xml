@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Facturas_Iberdrola</string>
+    <string-array name="rangSliderValues">
+        <item>9</item>
+        <item>90</item>
+    </string-array>
+</resources>
