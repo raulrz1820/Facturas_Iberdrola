@@ -3,6 +3,7 @@ package com.example.facturas_iberdrola
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +20,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+
+val TAG_LOGS = "kikopalomares"
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         filterIcon.setOnClickListener {
             startActivity(Intent(this@MainActivity, MainActivity2::class.java))
         }
+        getFacturas()
     }
         private fun initRecyclerView(){
             binding.rvFacturas.layoutManager = LinearLayoutManager(this)
@@ -56,19 +60,26 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-         private fun getFacturas(query:String) {
+         private fun getFacturas() {
             CoroutineScope(Dispatchers.IO).launch {
                 val call: Response<FacturasResponse> = getRetrofit().create(FacturasApi::class.java).getFacturas()
                 val facturita: FacturasResponse? = call.body()
+                Log.i(TAG_LOGS,call.body().toString())
                 runOnUiThread {
                     //Si la llamada es exitosa se almacenan las facturas recibidas de la API en una variable local
                     if (call.isSuccessful) {
                         //si callBody es nullo facturas = lista vacía
-                        val factures = facturita?.facturas ?: emptyList()
+                        val factures: List<Facturas> = call.body()!!.facturas
 
                         infoFacturas.clear()
                         infoFacturas.addAll(factures)
                         adapter.notifyDataSetChanged()
+
+                        adapter = FacturasAdapter(factures)
+
+                        val lista = binding.rvFacturas
+                        lista.adapter = adapter
+                        lista.layoutManager = LinearLayoutManager(this@MainActivity)
 
 
                         } else {
