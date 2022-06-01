@@ -23,6 +23,13 @@ import retrofit2.create
 
 val TAG_LOGS = "kikopalomares"
 
+//----------------------------------------------------------------------------------------------
+//El retrofti funciona perfectamente pero no podreis runear la aplicacion porque la practica dos
+//tiene fallos, quitar la clase que de error para poder comprobar el retrofit.
+//Ademas el MVVM no he sido capaz de sacarlo, mas o menos lo he entendido pero no se como
+//implementarlo en la practica 1.
+//----------------------------------------------------------------------------------------------
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
@@ -60,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-         private fun getFacturas() {
+        private fun getFacturas() {
             CoroutineScope(Dispatchers.IO).launch {
                 val call: Response<FacturasResponse> = getRetrofit().create(FacturasApi::class.java).getFacturas()
                 val facturita: FacturasResponse? = call.body()
